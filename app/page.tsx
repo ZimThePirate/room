@@ -60,7 +60,7 @@ export default function Home() {
               </div>
               <div className="space-y-1">
                 <Label htmlFor="Room Name">Room Name</Label>
-                <Input id="Room Name" />
+                <Input id="roomName" />
               </div>
             </CardContent>
             <CardFooter>
