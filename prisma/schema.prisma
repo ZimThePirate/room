@@ -19,7 +19,7 @@ model User {
   uniqueKey uniqueKey[]
 }
 
-model roomCode {
+model roomKey {
   id String @unique
 
   uniqueKey uniqueKey[]
@@ -30,8 +30,8 @@ model uniqueKey {
   id String @unique
   name String
 
-  roomCode roomCode @relation(fields: [roomCodeId], references: [id])
-  roomCodeId String
+  roomKey roomKey @relation(fields: [roomKeyId], references: [id])
+  roomKeyId String
 
   roomName String
 
@@ -48,6 +48,6 @@ model message {
   uniqueKey uniqueKey @relation(fields: [uniqueKeyId], references: [id])
   uniqueKeyId String
 
-  roomCode roomCode @relation(fields: [roomCodeId], references: [id])
-  roomCodeId String
+  roomKey roomKey @relation(fields: [roomKeyId], references: [id])
+  roomKeyId String
 }
