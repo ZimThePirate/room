@@ -10,6 +10,8 @@ export async function POST(request: Request) {
         return await handleCreateRoom(data)
       case 'enter':
         return await handleEnterRoom(data)
+      case 'join':
+        return await handleJoinRoom(data)
       default:
         return NextResponse.json(
           { error: 'Invalid action' },
@@ -26,74 +28,75 @@ export async function POST(request: Request) {
 }
 
 async function handleCreateRoom(data: { name: string; roomName: string }) {
-  const roomKey = generateKey()
-  const uniqueKey = generateKey()
+  const roomKey = generateKey();
+  const uniqueKey = generateKey();
 
-  const room = await prisma.roomKey.create({
+  await prisma.roomKey.create({
     data: {
       id: roomKey,
       uniqueKey: {
         create: {
           id: uniqueKey,
           name: data.name,
-          roomName: data.roomName
-        }
-      }
+          roomName: data.roomName,
+        },
+      },
     },
-    include: {
-      uniqueKey: true
-    }
-  })
+  });
 
   return NextResponse.json({
-    roomKey: room.id,
-    uniqueKey: room.uniqueKey[0].id
-  })
+    roomKey,
+    uniqueKey,
+  });
 }
 
 async function handleEnterRoom(data: { key: string; keyType: string }) {
   if (data.keyType === 'Unique Key') {
+    // Direct access for existing uniqueKey
     const uniqueKey = await prisma.uniqueKey.findUnique({
       where: { id: data.key },
-      include: { roomKey: true }
-    })
+      include: { roomKey: true },
+    });
 
     if (!uniqueKey) {
-      return NextResponse.json(
-        { error: 'Invalid unique key' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'Invalid key' }, { status: 404 });
     }
-
     return NextResponse.json({
       roomKey: uniqueKey.roomKeyId,
-      uniqueKey: uniqueKey.id
-    })
+      uniqueKey: uniqueKey.id,
+    });
   } else {
-    const room = await prisma.roomKey.findUnique({
+    const roomExists = await prisma.roomKey.findUnique({
       where: { id: data.key },
-      include: { uniqueKey: true }
-    })
-
-    if (!room) {
-      return NextResponse.json(
-        { error: 'Invalid room key' },
-        { status: 404 }
-      )
+    });
+    if (!roomExists) {
+      return NextResponse.json({ error: 'Room not found' }, { status: 404 });
     }
-
     return NextResponse.json({
-      roomKey: room.id,
-      uniqueKey: room.uniqueKey[0]?.id
-    })
+      roomKey: data.key,
+      needsUserInfo: true,
+    });
   }
+}
+
+async function handleJoinRoom(data: { roomKey: string; roomName: string; name: string }) {
+  const uniqueKey = generateKey();
+  await prisma.uniqueKey.create({
+    data: {
+      id: uniqueKey,
+      name: data.name,
+      roomName: data.roomName,
+      roomKeyId: data.roomKey
+    },
+  });
+  return NextResponse.json({ roomKey: data.roomKey, uniqueKey });
 }
 
 function generateKey(length: number = 8): string {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const randomValues = new Uint32Array(length);
   crypto.getRandomValues(randomValues);
-  
+
   return Array.from(randomValues)
     .map((value) => chars[value % chars.length])
     .join('');
