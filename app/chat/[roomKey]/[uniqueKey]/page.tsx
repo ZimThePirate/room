@@ -16,7 +16,7 @@ export default function MessagePage() {
   return (
     <div className="flex flex-col h-screen">
       <div className="flex-1 overflow-y-auto p-4"></div>
-      
+
       <TextBox
         value={message}
         onChange={(e) => setMessage(e.target.value)}

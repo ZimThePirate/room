@@ -23,31 +23,31 @@ model roomKey {
   id String @unique
 
   uniqueKey uniqueKey[]
-  message message[]
+  message   message[]
 }
 
 model uniqueKey {
-  id String @unique
+  id   String @unique
   name String
 
-  roomKey roomKey @relation(fields: [roomKeyId], references: [id])
+  roomKey   roomKey @relation(fields: [roomKeyId], references: [id])
   roomKeyId String
 
   roomName String
 
-  user User? @relation(fields: [userId], references: [id])
+  user   User? @relation(fields: [userId], references: [id])
   userId Int?
 
   message message[]
 }
 
 model message {
-  id String @unique
+  id      String @unique
   message String
 
-  uniqueKey uniqueKey @relation(fields: [uniqueKeyId], references: [id])
+  uniqueKey   uniqueKey @relation(fields: [uniqueKeyId], references: [id])
   uniqueKeyId String
 
-  roomKey roomKey @relation(fields: [roomKeyId], references: [id])
+  roomKey   roomKey @relation(fields: [roomKeyId], references: [id])
   roomKeyId String
 }

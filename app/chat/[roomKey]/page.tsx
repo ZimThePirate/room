@@ -31,7 +31,7 @@ export default function RoomJoinPage({ params }: { params: { roomKey: string } }
           roomName: roomName.trim()
         })
       })
-      
+
       const data = await res.json()
       if (res.ok) {
         router.push(`/chat/${data.roomKey}/${data.uniqueKey}`)
@@ -54,7 +54,7 @@ export default function RoomJoinPage({ params }: { params: { roomKey: string } }
         </CardHeader>
         <CardContent className="space-y-4">
           {error && <p className="text-red-500 text-sm">{error}</p>}
-          
+
           <div className="space-y-2">
             <Label htmlFor="name">Your Name</Label>
             <Input
