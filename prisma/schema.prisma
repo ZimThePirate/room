@@ -42,8 +42,9 @@ model uniqueKey {
 }
 
 model message {
-  id      String @unique
-  message String
+  id        String   @unique
+  message   String
+  createdAt DateTime @default(now())
 
   uniqueKey   uniqueKey @relation(fields: [uniqueKeyId], references: [id])
   uniqueKeyId String

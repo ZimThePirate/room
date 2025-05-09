@@ -2,8 +2,10 @@
 
 import { useState } from 'react'
 import { useParams } from 'next/navigation'
+
 import TextBox from '@/components/message/textbox'
 import { TopBar } from '@/components/message/top-bar'
+import MessageWindow from '@/components/message/message-window'
 
 export default function MessagePage() {
   const [message, setMessage] = useState('')
@@ -20,8 +22,7 @@ export default function MessagePage() {
     <div className="flex flex-col h-screen">
       <TopBar uniqueKeyId={uniqueKeyId} />
 
-      <div className="flex-1 overflow-y-auto p-4">
-      </div>
+      <MessageWindow />
 
       <TextBox
         value={message}
