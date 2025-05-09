@@ -13,7 +13,7 @@ interface TextBoxProps {
 const TextBox = ({ value, onChange, onSubmit }: TextBoxProps) => {
     return (
         <form
-            className="flex w-full max-w-sm items-center space-x-2 p-4 border-t"
+            className="flex w-full items-center space-x-2 p-4 border-t"
             onSubmit={(e) => {
                 e.preventDefault()
                 onSubmit()

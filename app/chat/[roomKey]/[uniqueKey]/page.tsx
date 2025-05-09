@@ -1,12 +1,15 @@
 'use client'
 
-import React from 'react'
 import { useState } from 'react'
-
+import { useParams } from 'next/navigation'
 import TextBox from '@/components/message/textbox'
+import { TopBar } from '@/components/message/top-bar'
 
 export default function MessagePage() {
   const [message, setMessage] = useState('')
+  const params = useParams()
+
+  const uniqueKeyId = params?.uniqueKey?.toString() || ''
 
   const handleSend = () => {
     console.log('Sending:', message)
@@ -15,7 +18,10 @@ export default function MessagePage() {
 
   return (
     <div className="flex flex-col h-screen">
-      <div className="flex-1 overflow-y-auto p-4"></div>
+      <TopBar uniqueKeyId={uniqueKeyId} />
+
+      <div className="flex-1 overflow-y-auto p-4">
+      </div>
 
       <TextBox
         value={message}

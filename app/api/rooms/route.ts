@@ -52,7 +52,6 @@ async function handleCreateRoom(data: { name: string; roomName: string }) {
 
 async function handleEnterRoom(data: { key: string; keyType: string }) {
   if (data.keyType === 'Unique Key') {
-    // Direct access for existing uniqueKey
     const uniqueKey = await prisma.uniqueKey.findUnique({
       where: { id: data.key },
       include: { roomKey: true },
